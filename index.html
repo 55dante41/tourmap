@@ -1,13 +1,105 @@
 <!DOCTYPE html>
 <html>
 <head>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCqYeMa0KpmrUDehCvtVLDb7W8FOy6vA3Y">
-</script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?libraries=places&key=AIzaSyCqYeMa0KpmrUDehCvtVLDb7W8FOy6vA3Y"></script>
+<script src="/scripts/knockout-3.3.0.js" type="text/javascript"></script>
+<style>
+.sidebar {
+  position: absolute;
+  background-color: whitesmoke;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  overflow-y: auto;
+}
+@media screen and (min-width: 320px) {
+  .sidebar {
+    width: 100%;
+  }
+  .searchbar-container{
+    position: absolute;
+    display: block;
+    width: 100%;
+  }
+  .searchbar {
+    padding: 10px;
+    border: none;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  }
+  .searchsuggestions-container{
+    margin-top: 5px;
+    padding: 10px;
+    border: none;
+    box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+    background-color: whitesmoke;
+  }
+}
+@media screen and (min-width: 768px) {
+.sidebar {
+  width: 25%;
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+}
+.searchbar-container{
+  position: absolute;
+  left: 100px;
+  display: block;
+  width: 25%;
+}
+.searchbar {
+  padding: 10px;
+  border: none;
+  box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.75);
+}
+.searchsuggestions-container{
+  margin-top: 5px;
+  padding: 10px;
+  border: none;
+  box-shadow: 0px 2px 10px 0px rgba(0,0,0,0.5);
+  background-color: whitesmoke;
+  max-height: 200px;
+  overflow-y: auto;
+  overflow-x: none;
+}
+}
+.marked-location{
+  padding: 10px;
+  box-shadow: 0px 2px white;
+}
+
+</style>
 </head>
 <body>
   <div id="mapCanvas" style="position: absolute; top:0; bottom: 0; left: 0; right: 0">
   </div>
-  <input type="text" style="position: absolute; left: 100px; display: block; width: 40%; height: 30px; padding: 5px">
+  <div>
+    <div class="searchbar-container">
+      <input data-bind="textInput: filterQuery" class="searchbar" style="display: block; width: 93%; padding: 10px">
+      <div data-bind="visible: showSuggestions, foreach: locations" class="searchsuggestions-container" style="width: 93%">
+        <p data-bind="text: name"></p>
+        <div class="marked-location" data-bind="text: infoWindowContent"></div>
+      </div>
+    </div>
+</div>
+  <div id="sidebar" class="sidebar" data-bind="visible: showSidebar">
+    <div id="marked-locations" data-bind="visible: showLocations, foreach: locations">
+    <p data-bind="text: name"></p>
+    <div class="marked-location" data-bind="text: infoWindowContent"></div>
+  </div>
+  <div id="locationdetails-container" data-bind="with: selectedLocation, visible: showLocationDetails">
+    <div id="locationdetails" data-bind="with: placeDetails">
+    <img data-bind="attr: {src: icon}">
+    <span data-bind="text: name"></span>
+    <span data-bind="text: formatted_address"></span>
+    <!-- ko if: 'photos' in $data -->
+    <div data-bind="foreach: photos">
+      <img data-bind="attr: {src: getUrl({maxWidth: 100, maxHeight: 100})}" style="width: 100px">
+    </div>
+    <!-- /ko -->
+  </div>
+  </div>
+  </div>
+  <script type="text/javascript" src="/scripts/mapBuilder.js"></script>
 </body>
-<script src="/mapBuilder.js" type="text/javascript"></script>
 </html>
