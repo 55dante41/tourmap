@@ -8,18 +8,18 @@ var VenuesService = function() {
   _self.getVenueDetails = function(req, successCb, errorCb) {
     var status, xhRes;
     var xhReq = new XMLHttpRequest();
-    xhReq.open("GET", "https://api.foursquare.com/v2/venues/"+ req.venueId +
-    "?oauth_token="+_self.oAuthToken+"&v="+_self.date, true);
+    xhReq.open("GET", "https://api.foursquare.com/v2/venues/" + req.venueId +
+      "?oauth_token=" + _self.oAuthToken + "&v=" + _self.date, true);
     xhReq.onload = function() {
       xhRes = JSON.parse(xhReq.response);
       status = xhRes.meta.code;
-      if(typeof successCb === 'function') {
+      if (typeof successCb === 'function') {
         successCb(xhRes.response.venue, status);
       }
     };
     xhReq.onerror = function() {
       status = xhReq.status;
-      if(typeof errorCb === 'function') {
+      if (typeof errorCb === 'function') {
         errorCb(status, xhReq);
       }
     };
@@ -57,6 +57,13 @@ var MarkedLocation = function(name, lat, long, placeId, venueId, themes) {
   _self.themes = themes;
 };
 
+MarkedLocation.prototype.showMarker = function() {
+  _self.marker().setMap(homePageViewModel.map);
+};
+MarkedLocation.prototype.hideMarker = function() {
+  _self.marker().setMap(null);
+};
+
 var HomePageViewModel = function() {
   var _self = this;
   _self.locations = ko.observableArray();
@@ -71,7 +78,7 @@ var HomePageViewModel = function() {
     _self.map = map;
   };
   _self.focusLocation = function(location) {
-    if(location) {
+    if (location) {
       _self.selectedLocation(location);
       _self.map.setCenter(location.latLng);
       homePageViewModel.showDetailsOfSelectedLocation();
@@ -93,17 +100,24 @@ var HomePageViewModel = function() {
   _self.hideSidebar = function() {
     _self.showSidebar(false);
   };
-  _self.toggleSidebar = function() {
-    _self.showSidebar(!_self.showSidebar());
+  _self.showAllLocationMarkers = function() {
+    for (var i = 0; i < _self.locations().length; i++) {
+      _self.locations()[i].showMarker();
+    }
+  };
+  _self.hideAllLocationMarkers = function() {
+    for (var i = 0; i < _self.locations().length; i++) {
+      _self.locations()[i].hideMarker();
+    }
   };
   _self.venueImageInFocusInSelectedLocation = ko.observable(0);
   _self.focusNextVenueImageInSelectedLocation = function() {
-    if(_self.venueImageInFocusInSelectedLocation() < _self.getVenuePhotos().length - 1) {
+    if (_self.venueImageInFocusInSelectedLocation() < _self.getVenuePhotos().length - 1) {
       _self.venueImageInFocusInSelectedLocation(_self.venueImageInFocusInSelectedLocation() + 1);
     }
   };
   _self.focusPrevVenueImageInSelectedLocation = function() {
-    if(_self.venueImageInFocusInSelectedLocation() > 0) {
+    if (_self.venueImageInFocusInSelectedLocation() > 0) {
       _self.venueImageInFocusInSelectedLocation(_self.venueImageInFocusInSelectedLocation() - 1);
     }
   };
@@ -112,37 +126,82 @@ var HomePageViewModel = function() {
   };
   _self.placeImageInFocusInSelectedLocation = ko.observable(0);
   _self.focusNextPlaceImageInSelectedLocation = function() {
-    if(_self.placeImageInFocusInSelectedLocation() < _self.getPlacePhotos().length - 1) {
+    if (_self.placeImageInFocusInSelectedLocation() < _self.getPlacePhotos().length - 1) {
       _self.placeImageInFocusInSelectedLocation(_self.placeImageInFocusInSelectedLocation() + 1);
     }
   };
   _self.focusPrevPlaceImageInSelectedLocation = function() {
-    if(_self.placeImageInFocusInSelectedLocation() > 0) {
+    if (_self.placeImageInFocusInSelectedLocation() > 0) {
       _self.placeImageInFocusInSelectedLocation(_self.placeImageInFocusInSelectedLocation() - 1);
     }
   };
   _self.getPlacePhotos = function() {
     return _self.selectedLocation().placeDetails().photos;
   };
+  _self.nearbyAtms = [];
+  _self.nearbyAtmMarkersForSelectedLocation = [];
+  _self.getNearbyAtms = function(location, cb) {
+    if (!self.nearbyAtms) {
+      var nearbySearchRequest = {
+        location: location.latLng,
+        radius: '5000',
+        types: ['atm']
+      };
+      placesService.nearbySearch(nearbySearchRequest, function(results, status) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
+          _self.nearbyAtms = results;
+          cb(results);
+        } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+          console.log("NO RESULTS FOUND - EXPAND SEARCH RADIUS??");
+        } else {
+          console.log(status);
+        }
+      });
+    } else {
+      cb(_self.nearbyAtms);
+    }
+  };
+  _self.showNearbyAtmsForSelectedLocation = function() {
+    if (_self.selectedLocation()) {
+      _self.getNearbyAtms(_self.selectedLocation(), function(atms) {
+        for (var i = 0; i < _self.nearbyAtms.length; i++) {
+          var markerOpts = {
+            'map': _self.map,
+            'position': _self.nearbyAtms[i].geometry.location,
+            'icon': '/images/marker-blue.png'
+          };
+          var marker = new google.maps.Marker(markerOpts);
+          _self.nearbyAtmMarkersForSelectedLocation.push(marker);
+        }
+      });
+    }
+  };
+  _self.hideNearbyAtmsForSelectedLocation = function() {
+    if (!_self.nearbyAtmMarkersForSelectedLocation) {
+      for (var i = 0; i < _self.nearbyAtmMarkersForSelectedLocation.length; i++) {
+        _self.nearbyAtmMarkersForSelectedLocation[i].setMap(null);
+      }
+    }
+  };
   _self.getLocationDetails = function(location) {
-    if(!location.placeDetails() && location.placeId) {
+    if (!location.placeDetails() && location.placeId) {
       var placeRequest = {
         placeId: location.placeId
       };
       placesService.getDetails(placeRequest, function(place, status) {
-        if(status == google.maps.places.PlacesServiceStatus.OK) {
+        if (status == google.maps.places.PlacesServiceStatus.OK) {
           location.placeDetails(place);
         } else {
           console.log('Status from PlacesService: ' + status);
         }
       });
     }
-    if(!location.venueDetails() && location.venueId) {
+    if (!location.venueDetails() && location.venueId) {
       var venueRequest = {
         venueId: location.venueId
       };
       venuesService.getVenueDetails(venueRequest, function(venue, status) {
-        if(status == 200) {
+        if (status == 200) {
           location.venueDetails(venue);
         } else {
           console.log('Status from VenuesService: ' + status);
@@ -155,14 +214,14 @@ var HomePageViewModel = function() {
 };
 
 var homePageViewModel = new HomePageViewModel();
-homePageViewModel.filterQuery.subscribe(function (value) {
+homePageViewModel.filterQuery.subscribe(function(value) {
   homePageViewModel.showSuggestions(value.length > 0);
   homePageViewModel.filteredLocations(homePageViewModel.locations().filter(function(el) {
     return el.name.toLowerCase().indexOf(value.toLowerCase()) > -1;
   }));
 });
 homePageViewModel.locations.subscribe(function(changes) {
-  for(var i = 0; i < changes.length; i++) {
+  for (var i = 0; i < changes.length; i++) {
     var change = changes[i].value;
     var markerOpts = {
       'map': googleMap,
@@ -195,7 +254,7 @@ locationsData.push(new MarkedLocation("Singapore Flyer", 1.289320, 103.863094, '
 locationsData.push(new MarkedLocation("Singapore Botanic Gardens", 1.313899, 103.815925, 'ChIJvWDbfRwa2jERgNnTOpAU3-o', '4b3b3bd0f964a520ac7125e3', ['holiday', 'natural']));
 locationsData.push(new MarkedLocation("Jurong Bird Park", 1.318727, 103.706442, 'ChIJOVLiR10F2jERTB2-cCujA4o', '4b05880ef964a520b5ae22e3', ['holiday', 'natural', 'animal']));
 locationsData.push(new MarkedLocation("Universal Studios", 1.254063, 103.823765, 'ChIJQ6MVplUZ2jERn1LmNH0DlDA', '4b1ee9ebf964a5207e2124e3', ['holiday', 'amusement']));
-locationsData.push(new MarkedLocation("Buddha Tooth Relic Temple and Museum", 1.281623, 103.844316,'ChIJ0bwmznIZ2jEREOCMNggtIBk', ['holiday', 'temple', 'historical']));
+locationsData.push(new MarkedLocation("Buddha Tooth Relic Temple and Museum", 1.281623, 103.844316, 'ChIJ0bwmznIZ2jEREOCMNggtIBk', ['holiday', 'temple', 'historical']));
 locationsData.push(new MarkedLocation("Night Safari", 1.402123, 103.788018, 'ChIJ9xUuiNcT2jER49FS2OpE8W8', '4b05880ef964a520b7ae22e3', ['holiday', 'animal']));
 locationsData.push(new MarkedLocation("Asian Civilisations Museum", 1.287514, 103.851412, 'ChIJoZOhmQkZ2jERehLfvKlsoCA', '4b058810f964a52071af22e3', ['holiday', 'historical']));
 locationsData.push(new MarkedLocation("Underwater World", 1.258482, 103.811373, 'ChIJ36zKZvob2jERcbaD0IJUd-o', '4b05880ef964a520dcae22e3', ['holiday', 'animal', 'water', 'natural']));
@@ -214,7 +273,7 @@ function initialize() {
 
   googleMap.setCenter(defaultFocusPosition);
 
-  for(var i = 0; i < locationsData.length; i++) {
+  for (var i = 0; i < locationsData.length; i++) {
     homePageViewModel.locations.push(locationsData[i]);
     homePageViewModel.filteredLocations.push(locationsData[i]);
   }
