@@ -166,7 +166,8 @@ homePageViewModel.locations.subscribe(function(changes) {
     var change = changes[i].value;
     var markerOpts = {
       'map': googleMap,
-      'position': change.latLng
+      'position': change.latLng,
+      'icon': '/images/marker-gray.png'
     };
     var marker = new google.maps.Marker(markerOpts);
     change.marker(marker);
