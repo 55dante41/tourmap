@@ -58,10 +58,10 @@ var MarkedLocation = function(name, lat, long, placeId, venueId, themes) {
 };
 
 MarkedLocation.prototype.showMarker = function() {
-  _self.marker().setMap(homePageViewModel.map);
+  this.marker().setMap(homePageViewModel.map);
 };
 MarkedLocation.prototype.hideMarker = function() {
-  _self.marker().setMap(null);
+  this.marker().setMap(null);
 };
 
 var HomePageViewModel = function() {
@@ -74,6 +74,7 @@ var HomePageViewModel = function() {
   _self.showSidebar = ko.observable(false);
   _self.showLocationDetails = ko.observable(false);
   _self.selectedLocation = ko.observable();
+  _self.isLoading = ko.observable(true);
   _self.setMap = function(map) {
     _self.map = map;
   };
@@ -138,18 +139,18 @@ var HomePageViewModel = function() {
   _self.getPlacePhotos = function() {
     return _self.selectedLocation().placeDetails().photos;
   };
-  _self.nearbyAtms = [];
-  _self.nearbyAtmMarkersForSelectedLocation = [];
-  _self.getNearbyAtms = function(location, cb) {
-    if (!self.nearbyAtms) {
+  _self.nearbyServices = [];
+  _self.nearbyServiceMarkersForSelectedLocation = [];
+  _self.getNearbyServices = function(location, services, cb) {
+    if (!self.nearbyServices) {
       var nearbySearchRequest = {
         location: location.latLng,
-        radius: '5000',
-        types: ['atm']
+        radius: '2000',
+        types: services
       };
       placesService.nearbySearch(nearbySearchRequest, function(results, status) {
         if (status == google.maps.places.PlacesServiceStatus.OK) {
-          _self.nearbyAtms = results;
+          _self.nearbyServices = results;
           cb(results);
         } else if (status == google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
           console.log("NO RESULTS FOUND - EXPAND SEARCH RADIUS??");
@@ -158,29 +159,32 @@ var HomePageViewModel = function() {
         }
       });
     } else {
-      cb(_self.nearbyAtms);
+      cb(_self.nearbyServices);
     }
   };
-  _self.showNearbyAtmsForSelectedLocation = function() {
+  _self.showNearbyServicesForSelectedLocation = function(serviceType) {
     if (_self.selectedLocation()) {
-      _self.getNearbyAtms(_self.selectedLocation(), function(atms) {
-        for (var i = 0; i < _self.nearbyAtms.length; i++) {
+      _self.hideAllLocationMarkers();
+      _self.selectedLocation().marker().setMap(_self.map);
+      _self.getNearbyServices(_self.selectedLocation(), [serviceType], function(services) {
+        for (var i = 0; i < _self.nearbyServices.length; i++) {
           var markerOpts = {
             'map': _self.map,
-            'position': _self.nearbyAtms[i].geometry.location,
-            'icon': '/images/marker-blue.png'
+            'position': _self.nearbyServices[i].geometry.location,
+            'icon': '/images/marker-blue-atm.png'
           };
           var marker = new google.maps.Marker(markerOpts);
-          _self.nearbyAtmMarkersForSelectedLocation.push(marker);
+          _self.nearbyServiceMarkersForSelectedLocation.push(marker);
         }
       });
     }
   };
-  _self.hideNearbyAtmsForSelectedLocation = function() {
-    if (!_self.nearbyAtmMarkersForSelectedLocation) {
-      for (var i = 0; i < _self.nearbyAtmMarkersForSelectedLocation.length; i++) {
-        _self.nearbyAtmMarkersForSelectedLocation[i].setMap(null);
+  _self.hideNearbyServicesForSelectedLocation = function() {
+    if (_self.nearbyServiceMarkersForSelectedLocation) {
+      for (var i = 0; i < _self.nearbyServiceMarkersForSelectedLocation.length; i++) {
+        _self.nearbyServiceMarkersForSelectedLocation[i].setMap(null);
       }
+      _self.nearbyServiceMarkersForSelectedLocation = [];
     }
   };
   _self.getLocationDetails = function(location) {
@@ -197,16 +201,22 @@ var HomePageViewModel = function() {
       });
     }
     if (!location.venueDetails() && location.venueId) {
+      homePageViewModel.isLoading(true);
       var venueRequest = {
         venueId: location.venueId
       };
       venuesService.getVenueDetails(venueRequest, function(venue, status) {
+        console.log("Service returned");
+        console.log(status);
+        homePageViewModel.isLoading(false);
         if (status == 200) {
           location.venueDetails(venue);
         } else {
           console.log('Status from VenuesService: ' + status);
         }
       });
+    } else {
+      homePageViewModel.isLoading(false);
     }
     location.infoWindow().open(googleMap, location.marker());
     homePageViewModel.focusLocation(location);
@@ -239,6 +249,64 @@ homePageViewModel.locations.subscribe(function(changes) {
     });
   }
 }, null, 'arrayChange');
+
+//
+// Custom Binding
+//
+ko.bindingHandlers.loadingWhen = {
+  init: function(element) {
+    var currentPosition = element.style.position;
+    var loader = document.createElement('div');
+    loader.classList.add('loader');
+    loader.style.display = 'none';
+
+    element.appendChild(loader);
+    //element.innerHtml = '<div class="loader"></div>';
+    console.log(loader);
+    console.log(element);
+
+    //make sure that we can absolutely position the loader against the original element
+    if (currentPosition == "auto" || currentPosition == "static") {
+      element.style.position = "relative";
+    }
+
+    loader.style.position = "absolute";
+    loader.style.top = "50%";
+    loader.style.left = "50%";
+    loader.style.marginLeft = -(loader.offsetWidth / 2) + "px";
+    loader.style.marginTop = -(loader.offsetHeight / 2) + "px";
+    console.log(loader);
+  },
+  update: function(element, valueAccessor) {
+    var isLoading = ko.utils.unwrapObservable(valueAccessor());
+    console.log(element.childNodes);
+    var loader = element.querySelectorAll("div.loader")[0];
+    console.log(element);
+    console.log(loader);
+    var childrenToHide = [];
+    console.log(element.children);
+    for (var i = 0; i < element.children.length; i++) {
+      if (!element.children[i].classList.contains("loader")) {
+        childrenToHide.push(element.children[i]);
+      }
+    }
+    console.log(childrenToHide);
+    if (isLoading) {
+      for (var j = 0; j < childrenToHide.length; j++) {
+        childrenToHide[j].style.visibility = "hidden";
+        childrenToHide[j].disabled = "disabled";
+      }
+      loader.style.display = "initial";
+    } else {
+      //$loader.fadeOut("fast");{
+      loader.style.display = "none";
+      for (var k = 0; k < childrenToHide.length; k++) {
+        childrenToHide[k].style.visibility = "visible";
+        childrenToHide[k].disabled = null;
+      }
+    }
+  }
+};
 
 ko.applyBindings(homePageViewModel);
 
