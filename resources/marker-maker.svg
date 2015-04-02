@@ -29,7 +29,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="4.0072464"
-     inkscape:cx="-182.5"
+     inkscape:cx="-182.9991"
      inkscape:cy="47"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -207,7 +207,10 @@
        xml:space="preserve"
        id="flowRoot4538"
        style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:40px;line-height:125%;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, ';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
-       transform="matrix(0.5350595,0,0,0.5350595,-36.511955,445.62313)"><flowRegion
+       transform="matrix(0.5350595,0,0,0.5350595,-36.761503,444.37539)"
+       inkscape:export-filename="C:\Users\Dell\Documents\Workspace\udacity\frontenddev-nanodegree\neighborhood-map\images\marker-blue-atm.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"><flowRegion
          id="flowRegion4540"><rect
            id="rect4542"
            width="60"
@@ -215,5 +218,6 @@
            x="-301"
            y="979.36218"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, ';fill:#ffffff;fill-opacity:1" /></flowRegion><flowPara
-         id="flowPara4544">$</flowPara></flowRoot>  </g>
+         id="flowPara4544"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">$</flowPara></flowRoot>  </g>
 </svg>

@@ -279,30 +279,29 @@ ko.bindingHandlers.loadingWhen = {
   },
   update: function(element, valueAccessor) {
     var isLoading = ko.utils.unwrapObservable(valueAccessor());
-    console.log(element.childNodes);
-    var loader = element.querySelectorAll("div.loader")[0];
-    console.log(element);
-    console.log(loader);
+    var loaderElements = element.querySelectorAll("div.loader");
+    var isLoaderAvailable = loaderElements.length > 0;
     var childrenToHide = [];
-    console.log(element.children);
-    for (var i = 0; i < element.children.length; i++) {
-      if (!element.children[i].classList.contains("loader")) {
-        childrenToHide.push(element.children[i]);
+    if (isLoaderAvailable) {
+      var loader = loaderElements[0];
+      for (var i = 0; i < element.children.length; i++) {
+        if (!element.children[i].classList.contains("loader")) {
+          childrenToHide.push(element.children[i]);
+        }
       }
-    }
-    console.log(childrenToHide);
-    if (isLoading) {
-      for (var j = 0; j < childrenToHide.length; j++) {
-        childrenToHide[j].style.visibility = "hidden";
-        childrenToHide[j].disabled = "disabled";
-      }
-      loader.style.display = "initial";
-    } else {
-      //$loader.fadeOut("fast");{
-      loader.style.display = "none";
-      for (var k = 0; k < childrenToHide.length; k++) {
-        childrenToHide[k].style.visibility = "visible";
-        childrenToHide[k].disabled = null;
+      if (isLoading) {
+        for (var j = 0; j < childrenToHide.length; j++) {
+          childrenToHide[j].style.visibility = "hidden";
+          childrenToHide[j].disabled = "disabled";
+        }
+        loader.style.display = "initial";
+      } else {
+        //$loader.fadeOut("fast");
+        loader.style.display = "none";
+        for (var k = 0; k < childrenToHide.length; k++) {
+          childrenToHide[k].style.visibility = "visible";
+          childrenToHide[k].disabled = null;
+        }
       }
     }
   }
@@ -311,7 +310,7 @@ ko.bindingHandlers.loadingWhen = {
 ko.applyBindings(homePageViewModel);
 
 locationsData.push(new MarkedLocation("Marine Life Park", 1.256236, 103.818944, 'ChIJkRh7fv4b2jEReRI7dnChCPg', '4f03c0e79a52357321ff272b', ['holiday', 'animal', 'water', 'natural']));
-locationsData.push(new MarkedLocation("Telok Ayer Market", 1.280663, 103.850401, 'ChIJ5Y6l4Q0Z2jERYL0KDIjT6v0', null, ['market']));
+locationsData.push(new MarkedLocation("Telok Ayer Market", 1.280663, 103.850401, 'ChIJ5Y6l4Q0Z2jERYL0KDIjT6v0', '4c465994f9652d7f8ee7142b', ['market']));
 locationsData.push(new MarkedLocation("River Safari", 1.403839, 103.789423, 'ChIJxZfX_9gT2jERknwK8es7IHU', '4f6a90836b74ab8c3fdea078', ['holiday', 'animal', 'water', 'natural']));
 locationsData.push(new MarkedLocation("Old Ford Motor Factory", 1.353045, 103.769194, 'ChIJTcyXK1oQ2jERMjEftNlLGk0', '4b058810f964a5205baf22e3', ['holiday', 'historical']));
 locationsData.push(new MarkedLocation("Science Centre", 1.332900, 103.735791, 'ChIJY618FAQQ2jERzo1f5IAj4Bg', '4b058810f964a5206caf22e3', ['holiday', 'science']));
@@ -322,7 +321,7 @@ locationsData.push(new MarkedLocation("Singapore Flyer", 1.289320, 103.863094, '
 locationsData.push(new MarkedLocation("Singapore Botanic Gardens", 1.313899, 103.815925, 'ChIJvWDbfRwa2jERgNnTOpAU3-o', '4b3b3bd0f964a520ac7125e3', ['holiday', 'natural']));
 locationsData.push(new MarkedLocation("Jurong Bird Park", 1.318727, 103.706442, 'ChIJOVLiR10F2jERTB2-cCujA4o', '4b05880ef964a520b5ae22e3', ['holiday', 'natural', 'animal']));
 locationsData.push(new MarkedLocation("Universal Studios", 1.254063, 103.823765, 'ChIJQ6MVplUZ2jERn1LmNH0DlDA', '4b1ee9ebf964a5207e2124e3', ['holiday', 'amusement']));
-locationsData.push(new MarkedLocation("Buddha Tooth Relic Temple and Museum", 1.281623, 103.844316, 'ChIJ0bwmznIZ2jEREOCMNggtIBk', ['holiday', 'temple', 'historical']));
+locationsData.push(new MarkedLocation("Buddha Tooth Relic Temple and Museum", 1.281623, 103.844316, 'ChIJ0bwmznIZ2jEREOCMNggtIBk', '4a73e804f964a52099dd1fe3',['holiday', 'temple', 'historical']));
 locationsData.push(new MarkedLocation("Night Safari", 1.402123, 103.788018, 'ChIJ9xUuiNcT2jER49FS2OpE8W8', '4b05880ef964a520b7ae22e3', ['holiday', 'animal']));
 locationsData.push(new MarkedLocation("Asian Civilisations Museum", 1.287514, 103.851412, 'ChIJoZOhmQkZ2jERehLfvKlsoCA', '4b058810f964a52071af22e3', ['holiday', 'historical']));
 locationsData.push(new MarkedLocation("Underwater World", 1.258482, 103.811373, 'ChIJ36zKZvob2jERcbaD0IJUd-o', '4b05880ef964a520dcae22e3', ['holiday', 'animal', 'water', 'natural']));
