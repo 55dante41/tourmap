@@ -14,6 +14,7 @@
     body {
       font-family: 'Roboto', sans-serif;
     }
+    button:focus {outline:0 !important;}
 
     span.no-select {
       -webkit-user-select: none;
@@ -139,7 +140,21 @@
       margin-top: 93px
     }
 
-    .loader { background-image: url(data:image/gif;base64,R0lGODlhEAALAPQAAP///0pISOTk5N3d3e/v705MTEpISGpoaKalpY6MjM3NzWJgYH59fauqqpCPj9DQ0GRjY0xKSoF/f+zs7OPi4vb29nFwcOXl5fX19crKyru6utnY2PLy8gAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCwAAACwAAAAAEAALAAAFLSAgjmRpnqSgCuLKAq5AEIM4zDVw03ve27ifDgfkEYe04kDIDC5zrtYKRa2WQgAh+QQJCwAAACwAAAAAEAALAAAFJGBhGAVgnqhpHIeRvsDawqns0qeN5+y967tYLyicBYE7EYkYAgAh+QQJCwAAACwAAAAAEAALAAAFNiAgjothLOOIJAkiGgxjpGKiKMkbz7SN6zIawJcDwIK9W/HISxGBzdHTuBNOmcJVCyoUlk7CEAAh+QQJCwAAACwAAAAAEAALAAAFNSAgjqQIRRFUAo3jNGIkSdHqPI8Tz3V55zuaDacDyIQ+YrBH+hWPzJFzOQQaeavWi7oqnVIhACH5BAkLAAAALAAAAAAQAAsAAAUyICCOZGme1rJY5kRRk7hI0mJSVUXJtF3iOl7tltsBZsNfUegjAY3I5sgFY55KqdX1GgIAIfkECQsAAAAsAAAAABAACwAABTcgII5kaZ4kcV2EqLJipmnZhWGXaOOitm2aXQ4g7P2Ct2ER4AMul00kj5g0Al8tADY2y6C+4FIIACH5BAkLAAAALAAAAAAQAAsAAAUvICCOZGme5ERRk6iy7qpyHCVStA3gNa/7txxwlwv2isSacYUc+l4tADQGQ1mvpBAAIfkECQsAAAAsAAAAABAACwAABS8gII5kaZ7kRFGTqLLuqnIcJVK0DeA1r/u3HHCXC/aKxJpxhRz6Xi0ANAZDWa+kEAA7AAAAAAAAAAAA); height: 11px; width: 16px; }
+    .loader {
+      background-image: url(data:image/gif;base64,R0lGODlhEAALAPQAAP///0pISOTk5N3d3e/v705MTEpISGpoaKalpY6MjM3NzWJgYH59fauqqpCPj9DQ0GRjY0xKSoF/f+zs7OPi4vb29nFwcOXl5fX19crKyru6utnY2PLy8gAAAAAAAAAAACH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCwAAACwAAAAAEAALAAAFLSAgjmRpnqSgCuLKAq5AEIM4zDVw03ve27ifDgfkEYe04kDIDC5zrtYKRa2WQgAh+QQJCwAAACwAAAAAEAALAAAFJGBhGAVgnqhpHIeRvsDawqns0qeN5+y967tYLyicBYE7EYkYAgAh+QQJCwAAACwAAAAAEAALAAAFNiAgjothLOOIJAkiGgxjpGKiKMkbz7SN6zIawJcDwIK9W/HISxGBzdHTuBNOmcJVCyoUlk7CEAAh+QQJCwAAACwAAAAAEAALAAAFNSAgjqQIRRFUAo3jNGIkSdHqPI8Tz3V55zuaDacDyIQ+YrBH+hWPzJFzOQQaeavWi7oqnVIhACH5BAkLAAAALAAAAAAQAAsAAAUyICCOZGme1rJY5kRRk7hI0mJSVUXJtF3iOl7tltsBZsNfUegjAY3I5sgFY55KqdX1GgIAIfkECQsAAAAsAAAAABAACwAABTcgII5kaZ4kcV2EqLJipmnZhWGXaOOitm2aXQ4g7P2Ct2ER4AMul00kj5g0Al8tADY2y6C+4FIIACH5BAkLAAAALAAAAAAQAAsAAAUvICCOZGme5ERRk6iy7qpyHCVStA3gNa/7txxwlwv2isSacYUc+l4tADQGQ1mvpBAAIfkECQsAAAAsAAAAABAACwAABS8gII5kaZ7kRFGTqLLuqnIcJVK0DeA1r/u3HHCXC/aKxJpxhRz6Xi0ANAZDWa+kEAA7AAAAAAAAAAAA);
+      height: 11px;
+      width: 16px;
+    }
+
+    .btn-circle {
+      width: 45px;
+      height: 45px;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 20px;
+      line-height: 1.42;
+      border-radius: 50%;
+    }
   </style>
 </head>
 
@@ -178,19 +193,30 @@
       </div>
       <div id="locationdetails-container" data-bind="loadingWhen: $root.isLoading, with: selectedLocation, visible: showLocationDetails" style="padding: 5px">
         <div data-bind="foreach: themes" style="padding: 10px 0px">
-          <span data-bind="text: $data" style="background-color: black; color: white; padding: 10px"></span>
+          <a data-bind="text: $data" href="#" style="background-color: black; color: white; padding: 10px; text-decoration: none"></a>
+        </div>
+        <div style="padding: 5px">
+          <h5>Find nearby services: </h4>
+          <div style="display: inline-block; padding: 5px">
+            <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyAtmServicesForSelectedLocation"><i class="fa fa-credit-card"></i></button>
+            <span>ATMs</span>
+          </div>
+          <div style="display: inline-block; padding: 5px">
+            <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyGasStationServicesForSelectedLocation"><i class="fa fa-car"></i></button>
+            <span>Gas Stations</span>
+          </div>
         </div>
         <div id="venuedetails-container" data-bind="with: venueDetails" style="min-height: 100px; position: relative; padding: 5px; border: 1px solid darkgray; margin-top: 5px">
-          <h3 data-bind="text: name" style="display: block"></h3>
+          <h4 data-bind="text: name" style="display: block"></h4>
           <div data-bind="with: location">
             <!-- ko if: 'address' in $data -->
-            <span data-bind="text: address + ', '"></span>
+            <span data-bind="text: address"></span>,
             <!-- /ko -->
             <!-- ko if: 'city' in $data -->
-            <span data-bind="text: city + ' - '"></span>
+            <span data-bind="text: city"></span>-
             <!-- /ko -->
             <!-- ko if: 'postalCode' in $data -->
-            <span data-bind="text: postalCode + ', '"></span>
+            <span data-bind="text: postalCode"></span>,
             <!-- /ko -->
             <!-- ko if: 'country' in $data -->
             <span data-bind="text: country"></span>
@@ -224,7 +250,6 @@
             </div>
           </div>
         </div>
-        <button class="btn btn-lg btn-primary" style="width: 100%; margin-top: 10px" data-bind="click: $root.showNearbyServicesForSelectedLocation.bind($data,'atm')">Show nearby services</button>
         <div id="placedetails-container" data-bind="with: placeDetails" style="display:none; padding: 5px; border: 1px solid darkgray; margin-top: 5px">
           <img data-bind="attr: {src: icon}">
           <span data-bind="text: name"></span>
@@ -249,6 +274,9 @@
       </div>
     </div>
   </div>
+  <script type="text/javascript" src="/scripts/models.js"></script>
+  <script type="text/javascript" src="/scripts/services.js"></script>
+  <script type="text/javascript" src="/scripts/viewmodels.js"></script>
   <script type="text/javascript" src="/scripts/mapBuilder.js"></script>
 </body>
 
