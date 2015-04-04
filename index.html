@@ -250,27 +250,6 @@
             </div>
           </div>
         </div>
-        <div id="placedetails-container" data-bind="with: placeDetails" style="display:none; padding: 5px; border: 1px solid darkgray; margin-top: 5px">
-          <img data-bind="attr: {src: icon}">
-          <span data-bind="text: name"></span>
-          <span data-bind="text: formatted_address"></span>
-          <!-- ko if: 'photos' in $data -->
-          <h4>Place pics:</h4>
-          <div class="carousel">
-            <div data-bind="foreach: photos">
-              <div data-bind="visible: $index() === $root.placeImageInFocusInSelectedLocation()" style="text-align: center">
-                <img data-bind="attr: {src: getUrl({maxWidth: 100, maxHeight: 100})}" style="width: 100px">
-              </div>
-            </div>
-            <a class="left carousel-control" data-bind="click: $root.focusPrevPlaceImageInSelectedLocation" role="button">
-              <span class="fa fa-chevron-left no-select carousel-control-button"></span>
-            </a>
-            <a class="right carousel-control" data-bind="click: $root.focusNextPlaceImageInSelectedLocation" role="button">
-              <span class="fa fa-chevron-right no-select carousel-control-button"></span>
-            </a>
-          </div>
-          <!-- /ko -->
-        </div>
       </div>
     </div>
   </div>
