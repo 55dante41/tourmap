@@ -14,7 +14,10 @@
     body {
       font-family: 'Roboto', sans-serif;
     }
-    button:focus {outline:0 !important;}
+
+    button:focus {
+      outline: 0 !important;
+    }
 
     span.no-select {
       -webkit-user-select: none;
@@ -48,7 +51,7 @@
         left: 100px;
         top: 30px;
         display: block;
-        width: 75%;
+        width: 70%;
       }
       .searchbar {
         padding: 10px;
@@ -155,6 +158,16 @@
       line-height: 1.42;
       border-radius: 50%;
     }
+
+    .btn-circle-sm {
+      width: 40px;
+      height: 40px;
+      text-align: center;
+      padding: 6px 0;
+      font-size: 16px;
+      line-height: 1.42;
+      border-radius: 50%;
+    }
   </style>
 </head>
 
@@ -165,11 +178,12 @@
       <span style="color: #ecf0f1; font-size: 2.5em; font-weight: bold">map</span>
       <span style="color: #f39c12">alpha</span>
     </a>
+    <button class="btn btn-default btn-circle-sm" data-bind="click: openSidebar" style="position: absolute; right: 5px; top: 5px;"><i class="fa fa-bars"></i></button>
   </div>
   <div class="body">
     <div id="mapCanvas" class="map"></div>
     <div class="searchbar-container">
-      <input data-bind="textInput: filterQuery" class="searchbar" style="display: block; width: 93%; padding: 10px">
+      <input data-bind="textInput: filterQuery" class="searchbar" style="display: inline-block; width: 90%; padding: 10px">
       <div data-bind="visible: showSuggestions, foreach: filteredLocations" class="searchsuggestions-container" style="width: 93%">
         <a data-bind="text: name, click: $root.getLocationDetails" style="padding: 10px; text-decoration: none; display: block; cursor: pointer"></a>
       </div>
@@ -188,65 +202,74 @@
         </div>
 
       </div>
+      <div id="markedlocations-container">
+        <div style="padding: 10px">
+          <button data-bind="click: showAllLocationMarkers" class="btn btn-default btn-circle"><i class="fa fa-map-marker"></i></button>
+          <span>Show all locations</span>
+        </div>
       <div id="marked-locations" data-bind="visible: showLocations, foreach: locations">
         <a data-bind="text: name, click: $root.getLocationDetails" style="padding: 10px; text-decoration: none; display: block; cursor: pointer"></a>
       </div>
-      <div id="locationdetails-container" data-bind="loadingWhen: $root.isLoading, with: selectedLocation, visible: showLocationDetails" style="padding: 5px">
+    </div>
+      <div id="locationdetails-container" data-bind="with: selectedLocation, visible: showLocationDetails" style="padding: 5px">
         <div data-bind="foreach: themes" style="padding: 10px 0px">
           <a data-bind="text: $data" href="#" style="background-color: black; color: white; padding: 10px; text-decoration: none"></a>
         </div>
         <div style="padding: 5px">
           <h5>Find nearby services: </h4>
-          <div style="display: inline-block; padding: 5px">
-            <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyAtmServicesForSelectedLocation"><i class="fa fa-credit-card"></i></button>
-            <span>ATMs</span>
-          </div>
-          <div style="display: inline-block; padding: 5px">
-            <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyGasStationServicesForSelectedLocation"><i class="fa fa-car"></i></button>
-            <span>Gas Stations</span>
-          </div>
+            <div style="display: inline-block; padding: 5px">
+              <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyAtmServicesForSelectedLocation"><i class="fa fa-credit-card"></i></button>
+              <span>ATMs</span>
+            </div>
+            <div style="display: inline-block; padding: 5px">
+              <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyGasStationServicesForSelectedLocation"><i class="fa fa-car"></i></button>
+              <span>Gas Stations</span>
+            </div>
         </div>
         <div id="venuedetails-container" data-bind="with: venueDetails" style="min-height: 100px; position: relative; padding: 5px; border: 1px solid darkgray; margin-top: 5px">
-          <h4 data-bind="text: name" style="display: block"></h4>
-          <div data-bind="with: location">
-            <!-- ko if: 'address' in $data -->
-            <span data-bind="text: address"></span>,
-            <!-- /ko -->
-            <!-- ko if: 'city' in $data -->
-            <span data-bind="text: city"></span>-
-            <!-- /ko -->
-            <!-- ko if: 'postalCode' in $data -->
-            <span data-bind="text: postalCode"></span>,
-            <!-- /ko -->
-            <!-- ko if: 'country' in $data -->
-            <span data-bind="text: country"></span>
-            <!-- /ko -->
-          </div>
-          <!-- ko if: 'description' in $data -->
-          <h4 data-bind="text: description" style="display: block"></h4>
-          <!-- /ko -->
-          <h4>Venue pics:</h4>
-          <div class="carousel">
-            <div data-bind="foreach: photos.groups[0].items">
-              <div data-bind="visible: $index() === $root.venueImageInFocusInSelectedLocation()" style="text-align: center">
-                <img data-bind="attr: {src: prefix + '200x200' + suffix}">
-              </div>
+          <div data-bind="visible: $root.isLoading" class="loader" style="position: absolute; top: 50px; left: 50%; margin-left: 0px; margin-top: 0px;"></div>
+          <div>
+            <h4 data-bind="text: name" style="display: block"></h4>
+            <div data-bind="with: location">
+              <!-- ko if: 'address' in $data -->
+              <span data-bind="text: address"></span>,
+              <!-- /ko -->
+              <!-- ko if: 'city' in $data -->
+              <span data-bind="text: city"></span>-
+              <!-- /ko -->
+              <!-- ko if: 'postalCode' in $data -->
+              <span data-bind="text: postalCode"></span>,
+              <!-- /ko -->
+              <!-- ko if: 'country' in $data -->
+              <span data-bind="text: country"></span>
+              <!-- /ko -->
             </div>
-            <a class="left carousel-control" data-bind="click: $root.focusPrevVenueImageInSelectedLocation" role="button">
-              <span class="fa fa-chevron-left no-select carousel-control-button"></span>
-            </a>
-            <a class="right carousel-control" data-bind="click: $root.focusNextVenueImageInSelectedLocation" role="button">
-              <span class="fa fa-chevron-right no-select carousel-control-button"></span>
-            </a>
-          </div>
-          <h4>Tips:</h4>
-          <div data-bind="foreach: tips.groups[tips.groups.length-1].items" style="background-color: darkslategray; color: white">
-            <div style="padding: 5px;">
-              <span data-bind="with: user">
-                <img data-bind="attr: {src: photo.prefix + '20x20' + photo.suffix}">
-                <span data-bind="text: firstName"></span>
-              </span>
-              <span data-bind="text: text" style="display: block; padding: 5px; border: 1px solid gray; margin-top: 5px"></span>
+            <!-- ko if: 'description' in $data -->
+            <h4 data-bind="text: description" style="display: block"></h4>
+            <!-- /ko -->
+            <h4>Venue pics:</h4>
+            <div class="carousel">
+              <div data-bind="foreach: photos.groups[0].items">
+                <div data-bind="visible: $index() === $root.venueImageInFocusInSelectedLocation()" style="text-align: center">
+                  <img data-bind="attr: {src: prefix + '200x200' + suffix}">
+                </div>
+              </div>
+              <a class="left carousel-control" data-bind="click: $root.focusPrevVenueImageInSelectedLocation" role="button">
+                <span class="fa fa-chevron-left no-select carousel-control-button"></span>
+              </a>
+              <a class="right carousel-control" data-bind="click: $root.focusNextVenueImageInSelectedLocation" role="button">
+                <span class="fa fa-chevron-right no-select carousel-control-button"></span>
+              </a>
+            </div>
+            <h4>Tips:</h4>
+            <div data-bind="foreach: tips.groups[tips.groups.length-1].items" style="background-color: darkslategray; color: white">
+              <div style="padding: 5px;">
+                <span data-bind="with: user">
+                  <img data-bind="attr: {src: photo.prefix + '20x20' + photo.suffix}">
+                  <span data-bind="text: firstName"></span>
+                </span>
+                <span data-bind="text: text" style="display: block; padding: 5px; border: 1px solid gray; margin-top: 5px"></span>
+              </div>
             </div>
           </div>
         </div>

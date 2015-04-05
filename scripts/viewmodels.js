@@ -15,8 +15,10 @@ var HomePageViewModel = function() {
   _self.focusLocation = function(location) {
     if (location) {
       _self.selectedLocation(location);
+      _self.selectedLocation().showMarker();
       _self.map.setCenter(location.latLng);
-      homePageViewModel.showDetailsOfSelectedLocation();
+      _self.hideAllExceptSelectedLocationMarkers();
+      _self.showDetailsOfSelectedLocation();
     }
   };
   _self.showListOfLocations = function() {
@@ -28,12 +30,16 @@ var HomePageViewModel = function() {
     _self.showLocations(false);
     _self.showLocationDetails(true);
     _self.showSidebar(true);
+    _self.isLoading(false);
   };
   _self.openSidebar = function() {
     _self.showSidebar(true);
   };
   _self.hideSidebar = function() {
     _self.showSidebar(false);
+  };
+  _self.showSelectedLocationMarker = function() {
+    _self.selectedLocation().showMarker();
   };
   _self.showAllLocationMarkers = function() {
     for (var i = 0; i < _self.locations().length; i++) {
@@ -283,7 +289,7 @@ var HomePageViewModel = function() {
       });
     }
     if (!location.venueDetails() && location.venueId) {
-      homePageViewModel.isLoading(true);
+      _self.isLoading(true);
       var venueRequest = {
         venueId: location.venueId
       };
@@ -293,10 +299,12 @@ var HomePageViewModel = function() {
         } else {
           console.log('Status from VenuesService: ' + status);
         }
-        homePageViewModel.isLoading(false);
+        _self.isLoading(false);
       });
+    } else {
+      _self.isLoading(false);
     }
     location.infoWindow().open(googleMap, location.marker());
-    homePageViewModel.focusLocation(location);
+    _self.focusLocation(location);
   };
 };

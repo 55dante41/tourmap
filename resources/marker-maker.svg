@@ -28,9 +28,9 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="4.0072464"
-     inkscape:cx="-182.9991"
-     inkscape:cy="47"
+     inkscape:zoom="9.7017544"
+     inkscape:cx="289"
+     inkscape:cy="305.5"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
@@ -219,5 +219,37 @@
            y="979.36218"
            style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, ';fill:#ffffff;fill-opacity:1" /></flowRegion><flowPara
          id="flowPara4544"
-         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">$</flowPara></flowRoot>  </g>
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">$</flowPara></flowRoot>    <path
+       inkscape:connector-curvature="0"
+       style="opacity:1;fill:#a40000;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 281,727.3622 a 12.499998,11.336031 0 0 0 -12.5,11.33598 12.499998,11.336031 0 0 0 0.01,0.2597 l -0.01,0 0,0.9024 c 0,1.4533 1.2399,4.8127 2.64062,7.1543 0.71441,1.1943 3.19515,4.4602 5.51172,7.2578 2.31658,2.79763 4.28219,5.08983 4.36719,5.08983 0.19886,0 7.76322,-9.15223 8.91602,-10.79103 1.8305,-2.6022 3.56445,-6.9249 3.56445,-8.8848 l 0,-0.7285 -0.0137,0 A 12.499998,11.336031 0 0 0 293.5,738.69818 12.499998,11.336031 0 0 0 281,727.3622 Z"
+       id="path4230-0-3-6"
+       inkscape:export-filename="C:\Users\Dell\Documents\Workspace\udacity\frontenddev-nanodegree\neighborhood-map\images\marker-gasstation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <path
+       style="opacity:1;fill:#ef2929;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       d="m 290.68123,731.51026 -20.76367,13.53316 c 0.23568,0.4711 0.47802,0.9315 0.73046,1.3536 0.71441,1.1943 3.19515,4.4602 5.51172,7.25782 2.31658,2.79767 4.28219,5.08987 4.36719,5.08987 0.19886,0 7.76322,-9.15229 8.91602,-10.79109 1.8305,-2.6022 3.56445,-6.9249 3.56445,-8.8848 l 0,-0.7285 -0.0137,0 a 12.499998,11.336031 0 0 0 0.0137,-0.2597 12.499998,11.336031 0 0 0 -2.32617,-6.57036 z"
+       id="path4230-0-9"
+       inkscape:connector-curvature="0"
+       inkscape:export-filename="C:\Users\Dell\Documents\Workspace\udacity\frontenddev-nanodegree\neighborhood-map\images\marker-gasstation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90" />
+    <flowRoot
+       xml:space="preserve"
+       id="flowRoot4538-1"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:21.40237999px;line-height:125%;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, ';letter-spacing:0px;word-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       inkscape:export-filename="C:\Users\Dell\Documents\Workspace\udacity\frontenddev-nanodegree\neighborhood-map\images\marker-gasstation.png"
+       inkscape:export-xdpi="90"
+       inkscape:export-ydpi="90"
+       transform="translate(266.66003,727.06835)"><flowRegion
+         id="flowRegion4540-0"><rect
+           id="rect4542-4"
+           width="32.103569"
+           height="28.358154"
+           x="4.9504204"
+           y="-2.1071603"
+           style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:'Copperplate Gothic Bold';-inkscape-font-specification:'Copperplate Gothic Bold, ';fill:#ffffff;fill-opacity:1" /></flowRegion><flowPara
+         id="flowPara4544-6"
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:sans-serif;-inkscape-font-specification:'sans-serif Bold'">G</flowPara></flowRoot>  </g>
 </svg>
