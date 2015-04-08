@@ -1,15 +1,27 @@
 var googleMap, defaultFocusPosition, placesService, venuesService;
 var locationsData = [];
 
+// I've heard it go back and forth on the
+// "var funcName = function" vs "function varName()"
+// but personally I prefer the latter for readability,
+// or both together when you have a code-related reason not to.
 var VenuesService = function() {
-  var _self = this;
+  var _self = this; // I usually see this without the leading _, so just `self`
   _self.oAuthToken = 'VOESV32DEI115APD1UWEL5OYW5BEGYUNYEP0G3QVSX3VQBOD';
   _self.date = '20150322';
-  _self.getVenueDetails = function(req, successCb, errorCb) {
+  // in general, I'd avoid using raw XMLHttpRequest where possible, preferring libs like request
+  // but it's good to learn how to do manually too.
+  _self.getVenueDetails = function(req, successCb, errorCb) { // after re-reading, req/request is not a good variable name here... why not just pass venueId?
     var status, xhRes;
     var xhReq = new XMLHttpRequest();
-    xhReq.open("GET", "https://api.foursquare.com/v2/venues/" + req.venueId +
-      "?oauth_token=" + _self.oAuthToken + "&v=" + _self.date, true);
+    xhReq.open("GET",
+      "https://api.foursquare.com/v2/venues/" + req.venueId +
+      "?oauth_token=" + _self.oAuthToken + // I prefer to separate each str/var pair with newline
+      "&v=" + _self.date,
+      true // xhReq.open may be an exception since it's commonly used,
+      // but I prefer to have a comment saying what a param is in cases like these
+      // (eg; `true /*async*/`)
+    );
     xhReq.onload = function() {
       xhRes = JSON.parse(xhReq.response);
       status = xhRes.meta.code;
@@ -25,6 +37,9 @@ var VenuesService = function() {
     };
     xhReq.send(null);
   };
+  // no return value? ah... you're just using this as a Class, it seems...
+  // not a style I'm used to personally but I think it may be legit. Maybe not.
+  // Given the chance, I'd recommend using ES6 classes via Traceur or similar
 };
 
 var testVenuesService = function() {
@@ -34,13 +49,16 @@ var testVenuesService = function() {
   };
   venuesService.getVenueDetails(request, function(venue, status) {
     console.log(status);
-    console.log(data);
+    console.log(data); // data is undefined, no? did you test this code?
   }, function(status, xhr) {
     console.log(status);
     console.log(xhr);
   });
 };
 
+// why isn't this just an object? presumably it's a Knockout thing to do stuff this way?
+// ... coming back later, this makes sense. Just not a style I'm used to, I think...
+// you might want to discount my opinion on related things as a result
 var MarkedLocation = function(name, lat, long, placeId, venueId, themes) {
   var _self = this;
   _self.name = name;
@@ -110,6 +128,7 @@ var HomePageViewModel = function() {
       _self.locations()[i].hideMarker();
     }
   };
+  // pretty long name... would `venueImageInFocus` work?
   _self.venueImageInFocusInSelectedLocation = ko.observable(0);
   _self.focusNextVenueImageInSelectedLocation = function() {
     if (_self.venueImageInFocusInSelectedLocation() < _self.getVenuePhotos().length - 1) {
