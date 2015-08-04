@@ -45,28 +45,36 @@ var HomePageViewModel = function () {
 			.showMarker();
 	};
 	_self.showAllLocationMarkers = function () {
-		for ( var i = 0; i < _self.locations()
-			.length; i++ ) {
+		var locationsCount = _self.locations().length;
+		for ( var i = 0; i < locationsCount; i++ ) {
 			_self.locations()[ i ].showMarker();
 		}
+		_self.closeAllInfoWindows();
 	};
 	_self.hideAllLocationMarkers = function () {
-		for ( var i = 0; i < _self.locations()
-			.length; i++ ) {
+		var locationsCount = _self.locations().length;
+		for ( var i = 0; i < locationsCount; i++ ) {
 			_self.locations()[ i ].hideMarker();
 		}
 	};
 	_self.hideAllExceptSelectedLocationMarkers = function () {
 		if ( _self.selectedLocation() ) {
-			for ( var i = 0; i < _self.locations()
-				.length; i++ ) {
+			var locationsCount = _self.locations().length
+			for ( var i = 0; i < locationsCount; i++ ) {
 				if ( _self.selectedLocation()
 					.id != _self.locations()[ i ].id ) {
 					_self.locations()[ i ].hideMarker();
+					_self.locations()[ i ].hideInfoWindow();
 				}
 			}
 		} else {
 			console.log( "No selected location!" );
+		}
+	};
+	_self.closeAllInfoWindows = function () {
+		var locationsCount = _self.locations().length;
+		for ( var i = 0; i < locationsCount; i++ ) {
+				_self.locations()[ i ].hideInfoWindow();
 		}
 	};
 	_self.venueImageInFocusInSelectedLocation = ko.observable( 0 );
@@ -155,11 +163,12 @@ var HomePageViewModel = function () {
 				.id;
 			_self.hideAllExceptSelectedLocationMarkers();
 			_self.getNearbyAtmServices( _self.selectedLocation(), function ( services ) {
-				for ( var i = 0; i < _self.nearbyAtmServices[ selectedLocationId ].length; i++ ) {
+				var nearbyAtmServicesCount = _self.nearbyAtmServices[ selectedLocationId ].length;
+				for ( var i = 0; i < nearbyAtmServicesCount; i++ ) {
 					var markerOpts = {
 						'map': _self.map,
 						'position': _self.nearbyAtmServices[ selectedLocationId ][ i ].geometry.location,
-						'icon': '/images/marker-blue-atm.png'
+						'icon': 'images/marker-blue-atm.png'
 					};
 					var marker = new google.maps.Marker( markerOpts );
 					_self.nearbyAtmMarkersForSelectedLocation.push( marker );
@@ -169,8 +178,10 @@ var HomePageViewModel = function () {
 		}
 	};
 	_self.hideNearbyAtmServicesForSelectedLocation = function () {
-		if ( _self.nearbyAtmMarkersForSelectedLocation.length > 0 ) {
-			for ( var i = 0; i < _self.nearbyAtmMarkersForSelectedLocation.length; i++ ) {
+		var nearbyAtmMarkersForSelectedLocationCount = _self.nearbyAtmMarkersForSelectedLocation.length;
+		if ( nearbyAtmMarkersForSelectedLocationCount > 0 ) {
+
+			for ( var i = 0; i < nearbyAtmMarkersForSelectedLocationCount; i++ ) {
 				_self.nearbyAtmMarkersForSelectedLocation[ i ].setMap( null );
 			}
 			_self.nearbyAtmMarkersForSelectedLocation = [];
@@ -215,15 +226,15 @@ var HomePageViewModel = function () {
 	};
 	_self.showNearbyGasStationServicesForSelectedLocation = function () {
 		if ( _self.selectedLocation() && _self.nearbyGasStationMarkersForSelectedLocation.length === 0 ) {
-			var selectedLocationId = _self.selectedLocation()
-				.id;
+			var selectedLocationId = _self.selectedLocation().id;
 			_self.hideAllExceptSelectedLocationMarkers();
 			_self.getNearbyGasStationServices( _self.selectedLocation(), function ( services ) {
-				for ( var i = 0; i < _self.nearbyGasStationServices[ selectedLocationId ].length; i++ ) {
+				var nearbyGasStationServicesCount = _self.nearbyGasStationServices[ selectedLocationId ].length;
+				for ( var i = 0; i < nearbyGasStationServicesCount; i++ ) {
 					var markerOpts = {
 						'map': _self.map,
 						'position': _self.nearbyGasStationServices[ selectedLocationId ][ i ].geometry.location,
-						'icon': '/images/marker-gasstation.png'
+						'icon': 'images/marker-gasstation.png'
 					};
 					var marker = new google.maps.Marker( markerOpts );
 					_self.nearbyGasStationMarkersForSelectedLocation.push( marker );
@@ -233,8 +244,9 @@ var HomePageViewModel = function () {
 		}
 	};
 	_self.hideNearbyGasStationServicesForSelectedLocation = function () {
-		if ( _self.nearbyGasStationMarkersForSelectedLocation.length > 0 ) {
-			for ( var i = 0; i < _self.nearbyGasStationMarkersForSelectedLocation.length; i++ ) {
+		var nearbyGasStationMarkersForSelectedLocationCount = _self.nearbyGasStationMarkersForSelectedLocation.length;
+		if ( nearbyGasStationMarkersForSelectedLocationCount > 0 ) {
+			for ( var i = 0; i < nearbyGasStationMarkersForSelectedLocationCount; i++ ) {
 				_self.nearbyGasStationMarkersForSelectedLocation[ i ].setMap( null );
 			}
 			_self.nearbyGasStationMarkersForSelectedLocation = [];
@@ -272,11 +284,12 @@ var HomePageViewModel = function () {
 				.marker()
 				.setMap( _self.map );
 			_self.getNearbyServices( _self.selectedLocation(), [ serviceType ], function ( services ) {
-				for ( var i = 0; i < _self.nearbyServices.length; i++ ) {
+				var nearbyServicesCount = _self.nearbyServices.length;
+				for ( var i = 0; i < nearbyServicesCount; i++ ) {
 					var markerOpts = {
 						'map': _self.map,
 						'position': _self.nearbyServices[ i ].geometry.location,
-						'icon': '/images/marker-blue-atm.png'
+						'icon': 'images/marker-blue-atm.png'
 					};
 					var marker = new google.maps.Marker( markerOpts );
 					_self.nearbyServiceMarkersForSelectedLocation.push( marker );
@@ -286,7 +299,8 @@ var HomePageViewModel = function () {
 	};
 	_self.hideNearbyServicesForSelectedLocation = function () {
 		if ( _self.nearbyServiceMarkersForSelectedLocation ) {
-			for ( var i = 0; i < _self.nearbyServiceMarkersForSelectedLocation.length; i++ ) {
+			var nearbyServiceMarkersForSelectedLocationCount = _self.nearbyServiceMarkersForSelectedLocation.length;
+			for ( var i = 0; i < nearbyServiceMarkersForSelectedLocationCount; i++ ) {
 				_self.nearbyServiceMarkersForSelectedLocation[ i ].setMap( null );
 			}
 			_self.nearbyServiceMarkersForSelectedLocation = [];

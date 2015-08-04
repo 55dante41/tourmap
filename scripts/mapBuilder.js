@@ -1,4 +1,4 @@
-var googleMap, defaultFocusPosition, placesService, venuesService, infoWindow;
+var googleMap, defaultFocusPosition, placesService, venuesService;
 var locationsData = [];
 
 var homePageViewModel = new HomePageViewModel();
@@ -11,15 +11,19 @@ homePageViewModel.filterQuery.subscribe( function ( value ) {
 		} ) );
 } );
 homePageViewModel.locations.subscribe( function ( changes ) {
+	if(homePageViewModel.selectedLocation()) {
+		homePageViewModel.selectedLocation().infoWindow().close();
+	}
 	for ( var i = 0; i < changes.length; i++ ) {
 		var change = changes[ i ].value;
 		var markerOpts = {
 			'map': googleMap,
 			'position': change.latLng,
-			'icon': '/images/marker-gray.png'
+			'icon': 'images/marker-gray.png'
 		};
 		var marker = new google.maps.Marker( markerOpts );
 		change.marker( marker );
+		var infoWindow = new google.maps.InfoWindow();
 		change.infoWindowContent( change.name );
 		infoWindow.setContent( change.infoWindowContent() );
 		change.infoWindow( infoWindow );
@@ -113,7 +117,6 @@ function initialize() {
 		zoom: 12
 	};
 	googleMap = new google.maps.Map( document.getElementById( 'mapCanvas' ), mapOptions );
-	infoWindow = new google.maps.InfoWindow();
 	homePageViewModel.setMap( googleMap );
 	placesService = new google.maps.places.PlacesService( googleMap );
 	venuesService = new VenuesService();
@@ -121,7 +124,8 @@ function initialize() {
 
 	googleMap.setCenter( defaultFocusPosition );
 
-	for ( var i = 0; i < locationsData.length; i++ ) {
+	var locationsDataCount = locationsData.length;
+	for ( var i = 0; i < locationsDataCount; i++ ) {
 		homePageViewModel.locations.push( locationsData[ i ] );
 		homePageViewModel.filteredLocations.push( locationsData[ i ] );
 	}

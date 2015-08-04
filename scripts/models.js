@@ -23,3 +23,8 @@ MarkedLocation.prototype.hideMarker = function () {
 	this.marker()
 		.setMap( null );
 };
+MarkedLocation.prototype.hideInfoWindow = function() {
+	if(this.infoWindow()) {
+		this.infoWindow().close();
+	}
+}
