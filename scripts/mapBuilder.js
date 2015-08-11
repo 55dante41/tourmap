@@ -61,15 +61,16 @@ ko.bindingHandlers.loadingWhen = {
 		var loaderElements = element.querySelectorAll( "div.loader" );
 		var isLoaderAvailable = loaderElements.length > 0;
 		var childrenToHide = [];
-		for ( var i = 0; i < element.children.length; i++ ) {
+		var elementChildrenCount = element.children.length;
+		for ( var i = 0; i < elementChildrenCount; i++ ) {
 			if ( !element.children[ i ].classList.contains( "loader" ) ) {
 				childrenToHide.push( element.children[ i ] );
 			}
 		}
-		//if (isLoaderAvailable) {
+		var childrenToHideCount = childrenToHide.length;
 		var loader = loaderElements[ 0 ];
 		if ( isLoading ) {
-			for ( var j = 0; j < childrenToHide.length; j++ ) {
+			for ( var j = 0; j < childrenToHideCount; j++ ) {
 				childrenToHide[ j ].style.visibility = "hidden";
 				childrenToHide[ j ].disabled = "disabled";
 			}
@@ -77,17 +78,11 @@ ko.bindingHandlers.loadingWhen = {
 		} else {
 			//$loader.fadeOut("fast");
 			loader.style.display = "none";
-			for ( var k = 0; k < childrenToHide.length; k++ ) {
+			for ( var k = 0; k < childrenToHideCount; k++ ) {
 				childrenToHide[ k ].style.visibility = "visible";
 				childrenToHide[ k ].disabled = null;
 			}
 		}
-		// } else {
-		//   for (var l = 0; l < childrenToHide.length; l++) {
-		//     childrenToHide[l].style.visibility = "visible";
-		//     childrenToHide[l].disabled = null;
-		//   }
-		//}
 	}
 };
 
