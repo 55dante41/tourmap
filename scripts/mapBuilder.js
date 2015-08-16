@@ -10,26 +10,42 @@ homePageViewModel.filterQuery.subscribe( function ( value ) {
 				.indexOf( value.toLowerCase() ) > -1;
 		} ) );
 } );
-homePageViewModel.locations.subscribe( function ( changes ) {
-	if(homePageViewModel.selectedLocation()) {
-		homePageViewModel.selectedLocation().infoWindow().close();
+homePageViewModel.filteredLocations.subscribe( function ( changes ) {
+	if ( homePageViewModel.selectedLocation() ) {
+		homePageViewModel.selectedLocation()
+			.infoWindow()
+			.close();
 	}
-	for ( var i = 0; i < changes.length; i++ ) {
-		var change = changes[ i ].value;
-		var markerOpts = {
-			'map': googleMap,
-			'position': change.latLng,
-			'icon': 'images/marker-gray.png'
-		};
-		var marker = new google.maps.Marker( markerOpts );
-		change.marker( marker );
-		var infoWindow = new google.maps.InfoWindow();
-		change.infoWindowContent( change.name );
-		infoWindow.setContent( change.infoWindowContent() );
-		change.infoWindow( infoWindow );
-		google.maps.event.addListener( marker, 'click', function () {
-			homePageViewModel.getLocationDetails( change );
-		} );
+	var changesCount = changes.length;
+	for ( var i = 0; i < changesCount; i++ ) {
+		if ( changes[ i ].status == 'deleted' ) {
+			changes[ i ].value.hideMarker();
+		} else {
+			var change = changes[ i ].value;
+
+			var markerOpts = {
+				'map': googleMap,
+				'position': change.latLng,
+				'animation': google.maps.Animation.DROP,
+				'icon': 'images/marker-gray.png'
+			};
+			var marker = new google.maps.Marker( markerOpts );
+			change.marker( marker );
+
+			var infoWindow = new google.maps.InfoWindow();
+			change.infoWindowContent( change.name );
+			infoWindow.setContent( change.infoWindowContent() );
+			change.infoWindow( infoWindow );
+
+			google.maps.event.addListener( marker, 'click', function () {
+				if ( marker.getAnimation() !== null ) {
+					marker.setAnimation( null );
+				} else {
+					marker.setAnimation( google.maps.Animation.BOUNCE );
+				}
+				homePageViewModel.getLocationDetails( change );
+			} );
+		}
 	}
 }, null, 'arrayChange' );
 

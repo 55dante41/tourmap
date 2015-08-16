@@ -45,21 +45,26 @@ var HomePageViewModel = function () {
 			.showMarker();
 	};
 	_self.showAllLocationMarkers = function () {
-		var locationsCount = _self.locations().length;
+		_self.filterQuery( "" );
+		var locationsCount = _self.locations()
+			.length;
 		for ( var i = 0; i < locationsCount; i++ ) {
-			_self.locations()[ i ].showMarker();
+			_self.filteredLocations()
+				.push( _self.locations()[ i ] );
 		}
 		_self.closeAllInfoWindows();
 	};
 	_self.hideAllLocationMarkers = function () {
-		var locationsCount = _self.locations().length;
+		var locationsCount = _self.locations()
+			.length;
 		for ( var i = 0; i < locationsCount; i++ ) {
 			_self.locations()[ i ].hideMarker();
 		}
 	};
 	_self.hideAllExceptSelectedLocationMarkers = function () {
 		if ( _self.selectedLocation() ) {
-			var locationsCount = _self.locations().length
+			var locationsCount = _self.locations()
+				.length;
 			for ( var i = 0; i < locationsCount; i++ ) {
 				if ( _self.selectedLocation()
 					.id != _self.locations()[ i ].id ) {
@@ -72,9 +77,10 @@ var HomePageViewModel = function () {
 		}
 	};
 	_self.closeAllInfoWindows = function () {
-		var locationsCount = _self.locations().length;
+		var locationsCount = _self.locations()
+			.length;
 		for ( var i = 0; i < locationsCount; i++ ) {
-				_self.locations()[ i ].hideInfoWindow();
+			_self.locations()[ i ].hideInfoWindow();
 		}
 	};
 	_self.venueImageInFocusInSelectedLocation = ko.observable( 0 );
@@ -226,7 +232,8 @@ var HomePageViewModel = function () {
 	};
 	_self.showNearbyGasStationServicesForSelectedLocation = function () {
 		if ( _self.selectedLocation() && _self.nearbyGasStationMarkersForSelectedLocation.length === 0 ) {
-			var selectedLocationId = _self.selectedLocation().id;
+			var selectedLocationId = _self.selectedLocation()
+				.id;
 			_self.hideAllExceptSelectedLocationMarkers();
 			_self.getNearbyGasStationServices( _self.selectedLocation(), function ( services ) {
 				var nearbyGasStationServicesCount = _self.nearbyGasStationServices[ selectedLocationId ].length;

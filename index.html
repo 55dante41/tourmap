@@ -32,7 +32,7 @@
                 outline: 0 !important;
             }
 
-            span.no-select {
+            .no-select {
                 -webkit-user-select: none;
                 /* webkit (safari, chrome) browsers */
                 -moz-user-select: none;
@@ -57,6 +57,7 @@
                 .sidebar {
                     width: 100%;
                 }
+
                 .searchbar-container {
                     position: absolute;
                     left: 100px;
@@ -64,11 +65,13 @@
                     display: block;
                     width: 70%;
                 }
+
                 .searchbar {
                     padding: 10px;
                     border: none;
                     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.75);
                 }
+
                 .searchsuggestions-container {
                     margin-top: 5px;
                     padding: 10px;
@@ -90,6 +93,7 @@
                     -moz-box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.75);
                     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.75);
                 }
+
                 .searchbar-container {
                     position: absolute;
                     left: 100px;
@@ -97,11 +101,13 @@
                     display: block;
                     width: 25%;
                 }
+
                 .searchbar {
                     padding: 10px;
                     border: none;
                     box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.75);
                 }
+
                 .searchsuggestions-container {
                     margin-top: 5px;
                     padding: 10px;
@@ -231,7 +237,7 @@
                         <a data-bind="text: $data" href="#" style="background-color: black; color: white; padding: 10px; text-decoration: none"></a>
                     </div>
                     <div style="padding: 5px">
-                        <h5>Find nearby services: </h4>
+                        <h4>Find nearby services: </h4>
                             <div style="display: inline-block; padding: 5px">
                                 <button class="btn btn-default btn-circle" data-bind="click: $root.toggleNearbyAtmServicesForSelectedLocation"><i class="fa fa-credit-card"></i></button>
                                 <span>ATMs</span>
@@ -266,7 +272,7 @@
                             <div class="carousel">
                                 <div data-bind="foreach: photos.groups[0].items">
                                     <div data-bind="visible: $index() === $root.venueImageInFocusInSelectedLocation()" style="text-align: center">
-                                        <img data-bind="attr: {src: prefix + '200x200' + suffix}">
+                                        <img data-bind="attr: {src: prefix + '200x200' + suffix}" alt="Venue Pic">
                                     </div>
                                 </div>
                                 <a class="left carousel-control" data-bind="click: $root.focusPrevVenueImageInSelectedLocation" role="button">
@@ -280,7 +286,7 @@
                             <div data-bind="foreach: tips.groups[tips.groups.length-1].items" style="background-color: darkslategray; color: white">
                                 <div style="padding: 5px;">
                                     <span data-bind="with: user">
-                                        <img data-bind="attr: {src: photo.prefix + '20x20' + photo.suffix}">
+                                        <img data-bind="attr: {src: photo.prefix + '20x20' + photo.suffix}" alt="User Pic">
                                         <span data-bind="text: firstName"></span>
                                     </span>
                                     <span data-bind="text: text" style="display: block; padding: 5px; border: 1px solid gray; margin-top: 5px"></span>

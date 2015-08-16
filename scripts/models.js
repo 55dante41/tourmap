@@ -27,4 +27,4 @@ MarkedLocation.prototype.hideInfoWindow = function() {
 	if(this.infoWindow()) {
 		this.infoWindow().close();
 	}
-}
+};
